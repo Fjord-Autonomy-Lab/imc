@@ -11244,7 +11244,15 @@
     </field>
    </message>
 
-  <message id="911" name="Absolute Wind" abbrev="AbsoluteWind" source="vehicle" flags="periodic" category="Sensors">
+  <message id="910" name="Estimated Wave Frequency" abbrev="EstimatedFreq" source="vehicle" flags="periodic" category="Sensors">
+    <field name="Value" abbrev="value" type="fp64_t" unit="rad/s">
+      <description>
+        Wave Frequency Estimated from Heave Acceleration (IMU).
+      </description>
+    </field>
+  </message>
+
+<message id="911" name="Absolute Wind" abbrev="AbsoluteWind" source="vehicle" flags="periodic" category="Sensors">
     <description>
       Measurement of absolute wind speed (Meaning without vehicle effects).
     </description>
@@ -11353,7 +11361,113 @@
     </field>
   </message>
 
-  <message id="1014" name="Current Profile" abbrev="CurrentProfile" source="vehicle" flags="periodic" category="Sensors">
+  <message id="916" name="Collision Avoidance" abbrev="CollisionAvoidance" source="vehicle" flags="periodic" category="Navigation">
+    <description>
+      Envelope with CAS information.
+    </description>
+    <field name="MMSI" abbrev="mmsi" type="plaintext">
+      <description>
+        Obstacle ID.
+      </description>
+    </field>
+    <field name="Latitude (WGS-84)" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        Obstacle WGS-84 Latitude.
+      </description>
+    </field>
+    <field name="Longitude (WGS-84)" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        Obstacle WGS-84 Longitude.
+      </description>
+    </field>
+    <field name="Offset north" abbrev="x" type="fp32_t" unit="m">
+      <description>
+        The North offset of the North/East/Down field with respect to
+        own vessel.
+      </description>
+    </field>
+    <field name="Offset east" abbrev="y" type="fp32_t" unit="m">
+      <description>
+        The East offset of the North/East/Down field with respect to
+        own vessel.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t" unit="m/s">
+      <description>
+        Obstacle SOG in m/s.
+      </description>
+    </field>
+    <field name="Course" abbrev="course" type="fp32_t" unit="°">
+      <description>
+        Obstacle COG in degrees.
+      </description>
+    </field>
+    <field name="Distance" abbrev="dist" type="fp32_t" unit="m">
+      <description>
+        Distance between obstacle and own vessel.
+      </description>
+    </field>
+    <field name="Length" abbrev="length" type="fp32_t" unit="m">
+      <description>
+        Obstacle length.
+      </description>
+    </field>
+    <field name="Width" abbrev="width" type="fp32_t" unit="m">
+      <description>
+        Obstacle width.
+      </description>
+    </field>
+    <field name="Obstacle vector size" abbrev="o_vect" type="fp32_t">
+      <description>
+        Size of obstacles vector.
+      </description>
+    </field>
+  </message>
+
+<message id="918" name="Heave Displacement" abbrev="Heave" source="vehicle" category="Sensors">
+    <description>
+      Contains heave measurement computed by GPS.
+    </description>
+    <field name="Heave" abbrev="value" type="fp32_t" unit="m">
+      <description>
+        Example: 2m.
+      </description>
+    </field>
+  </message>
+
+<message id="1000" name="Dynamic Obstacles Vector" abbrev="DynObsVec" source="ccu" category="Maneuvering">
+   <description>
+    Vector of dynamic obstacles to be used in collision avoidance algorithms.
+   </description>
+   <field name="Obstacle List" abbrev="obstacles" type="message-list" message-type="CollisionAvoidance">
+   <description>
+    List of CollisionAvoidance messages.
+   </description>
+   </field>
+  </message>
+
+<message id="1011" name="Negotiation message log" abbrev="NegotiationMsgLog" source="vehicle" category="Autonomy">
+    <description>
+      Send received and transmitted negotiation message counts.
+    </description>
+    <field name="MMSI" abbrev="mmsi" type="plaintext">
+      <description>
+        Ownship ID.
+      </description>
+    </field>
+    <field name="Received Messages" abbrev="msg_in" type="uint8_t">
+      <description>
+        Received message count.
+      </description>
+    </field>
+    <field name="Transmitted Messages" abbrev="msg_out" type="uint8_t">
+      <description>
+        Transmitted message count.
+      </description>
+    </field>
+  </message>
+
+<message id="1014" name="Current Profile" abbrev="CurrentProfile" source="vehicle" flags="periodic" category="Sensors">
     <description>
       Contains a profile of water velocities measured relative to the vehicle
       velocity, represented in the specified coordinate system.
@@ -11645,7 +11759,169 @@
     </field>
   </message>
 
-  <message id="2010" name="Communication Restriction" abbrev="CommRestriction" source="ccu,vehicle" category="Networking">
+  <message id="2007" name="TBR Fish Tag" abbrev="TBRFishTag" source="vehicle,ccu" category="Sensors">
+    <description>
+      TBR700RT received fish tag detection
+    </description>
+    <field name="TBR serial number" abbrev="serial_no" type="uint32_t">
+      <description>
+        Serial number of the TBR receiver
+      </description>
+    </field>
+    <field name="UNIX Timestamp" abbrev="unix_timestamp" type="uint32_t">
+      <description>
+        Time of tag detection as UNIX timestamp 
+      </description>
+    </field>
+    <field name="Millisecond" abbrev="millis" type="uint16_t" unit="ms">
+      <description>
+        Milliseconds
+      </description>
+    </field>
+    
+    <field name="Transmit Protocol" abbrev="trans_protocol" type="uint8_t" unit="Enumerated" prefix="TBR">
+      <description>
+        Transmit Protocol of received transponder
+      </description>
+      <value id="1" name="R256" abbrev="R256"/>
+      <value id="2" name="R04K" abbrev="R04K"/>
+      <value id="4" name="R64K" abbrev="R64K"/>
+      <value id="5" name="R01M" abbrev="R01M"/>
+      <value id="6" name="S256" abbrev="S256"/>
+      <value id="3" name="S64K" abbrev="S64K"/>
+      <value id="7" name="HS256" abbrev="HS256"/>
+      <value id="8" name="DS256" abbrev="DS256"/>
+    </field>
+
+    <field name="Transmitter ID" abbrev="trans_id" type="uint32_t">
+      <description>
+        Transmitter ID
+      </description>
+    </field>
+    <field name="Transmitter Data" abbrev="trans_data" type="uint16_t">
+      <description>
+        Transmitter Data
+      </description>
+    </field>
+    <field name="Signal to Noise Ratio" abbrev="SNR" type="uint8_t" unit="dB">
+      <description>
+        Signal to Noise Ratio
+      </description>
+    </field>
+    <field name="Transmitter Detection Frequency" abbrev="trans_freq" type="uint8_t">
+      <description>
+        Transmitter Detection Frequency
+      </description>
+    </field>
+    <field name="Receiver Memory Address" abbrev="recv_mem_addr" type="uint16_t">
+      <description>
+        Receiver Memory Address (running entry number in flash memory)
+      </description>
+    </field>
+    <field name="Latitude (WGS-84)" abbrev="lat" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+     <description>
+        WGS-84 Latitude, stored from GPSfix.
+     </description>
+    </field>
+    <field name="Longitude (WGS-84)" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+     <description>
+       WGS-84 Longitude, stored from GPSfix.
+     </description>
+    </field>
+   </message>
+
+<message id="2008" name="TBR Sensor Reading" abbrev="TBRSensor" source="vehicle,ccu" category="Sensors">
+    <description>
+      TBR700RT internal sensor reading
+    </description>
+    <field name="TBR serial number" abbrev="serial_no" type="uint32_t">
+      <description>
+        Serial number of the TBR receiver
+      </description>
+    </field>
+    <field name="UNIX Timestamp" abbrev="unix_timestamp" type="uint32_t">
+      <description>
+        Time of sensor reading as UNIX timestamp 
+      </description>
+    </field>
+    <field name="Temperature" abbrev="temperature" type="fp32_t" unit="°C"/>
+    <field name="Average noise level" abbrev="avg_noise_level" type="uint8_t"/>
+    <field name="Peak noise level," abbrev="peak_noise_level" type="uint8_t"/>
+    <field name="Receiver listening frequency" abbrev="recv_listen_freq" type="uint8_t"/>
+    <field name="Receiver Memory Address" abbrev="recv_mem_addr" type="uint16_t">
+      <description>
+        Receiver Memory Address (running entry number in flash memory)
+      </description>
+    </field>
+   </message>
+
+<message id="2009" name="Planning Problem Specification" abbrev="PlanProbSpec" source="vehicle,ccu" category="Autonomy">
+    <description>
+      Specifies a planning problem to be solved.
+    </description>
+    <field name="Target vehicle" abbrev="vehicle" type="uint32_t">
+      <description>
+        Name of the vehicle the plan is to target
+      </description>
+    </field>
+    <field name="Type" abbrev="problem_type" type="uint8_t" unit="Enumerated" prefix="PPT">
+      <description>
+        Planning Problem Type
+      </description>
+      <value id="1" name="Feasible Path" abbrev="fpath">
+        <description>Find a feasible path</description>
+      </value>
+      <value id="2" name="Coverage" abbrev="coverage">
+        <description>Cover area</description>
+      </value>
+
+    </field>
+
+    <field name="Start Latitude WGS-84" abbrev="start_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude for start point.
+      </description>
+    </field>
+    <field name="Start Longitude WGS-84" abbrev="start_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude for start point.
+      </description>
+    </field>
+
+    <field name="End Latitude WGS-84" abbrev="end_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude for end point.
+      </description>
+    </field>
+    <field name="End Longitude WGS-84" abbrev="end_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude for end point.
+      </description>
+    </field>
+
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Reference speed.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Reference speed units.
+      </description>
+    </field>
+    <field name="Area" abbrev="area" type="message-list" message-type="PolygonVertex">
+      <description>
+        Planning Area
+      </description>
+    </field>
+    <field name="CustomParameters" abbrev="custom" type="plaintext" unit="TupleList">
+      <description>
+        Additional parameters to be used by the planner.
+      </description>
+    </field>
+   </message>
+
+<message id="2010" name="Communication Restriction" abbrev="CommRestriction" source="ccu,vehicle" category="Networking">
     <description>This message is used to restrict the vehicle from using some communication means.</description>
     <field name="Restricted Communication Means" abbrev="restriction" type="uint8_t" unit="Bitfield" prefix="MEAN">
       <description>The restricted communication means.</description>
@@ -11659,7 +11935,111 @@
     </field>
   </message>
 
-  <message id="2016" name="Query Typed Entity Parameters" abbrev="QueryTypedEntityParameters" source="vehicle" category="CCU">
+  <message id="2011" abbrev="AdmmPos" name="ADMM position point" source="vehicle"  category="Autonomy">
+  	<field name="Latitude" abbrev="lat" type="fp64_t" unit="rad"/>
+  	<field name="Longitude" abbrev="lon" type="fp64_t" unit="rad"/>
+  	<field name="Course" abbrev="course" type="fp64_t" unit="m/s"/>
+  </message>
+
+<message id="2012" name="ADMM path points" abbrev="AdmmPath" source="vehicle"  category="Autonomy">
+   <description>
+    Vector of dynamic obstacles to be used in collision avoidance algorithms.
+   </description>
+   <field name="path list" abbrev="path_list" type="message-list" message-type="AdmmPos">
+   <description>
+    List of Path point by ADMM algorithm.
+   </description>
+   </field>
+   <field name="MMSI" abbrev="mmsi" type="int8_t"/>
+  </message>
+
+<message id="2013" name="Negotiation data" abbrev="NegotiationData" source="vehicle"  category="Autonomy">
+    <description>
+      Package of negotiation messages.
+    </description>
+    <field name="MMSI" abbrev="mmsi" type="int8_t">
+      <description>
+        Ownship ID (for experiment purpose, ID is integer only).
+      </description>
+    </field>
+    <field name="Time stamp" abbrev="time_stamp" type="fp32_t">
+      <description>
+        Time stamp of published message
+      </description>
+    </field>
+    <field name="Latitude" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        Own-ship current latitude.
+      </description>
+    </field>
+    <field name="Longtitude" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        Own-ship current longitude.
+      </description>
+    </field>
+    <field name="Nominal Speed" abbrev="nom_v" type="fp64_t">
+      <description>
+        Own-ship Nominal speed.
+      </description>
+    </field>
+    <field name="Proposed position" abbrev="pr_pos" type="message-list" message-type="AdmmPath">
+      <description>
+        ADMM messages.
+      </description>
+    </field>
+    <field name="Waypoint start latitude WGS-84" abbrev="wp_start_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude coordinate of the current waypoint.
+      </description>
+    </field>
+    <field name="Waypoint start longitude WGS-84" abbrev="wp_start_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude coordinate of the current waypoint.
+      </description>
+    </field>
+    <field name="Waypoint end latitude WGS-84" abbrev="wp_end_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude coordinate of the next waypoint.
+      </description>
+    </field>
+    <field name="Waypoint end longitude WGS-84" abbrev="wp_end_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude coordinate of the next waypoint.
+      </description>
+    </field>
+    <field name="Starboard status" abbrev="is_starboard" type="int8_t">
+      <description>
+        Starboard status of ownship
+      </description>
+    </field>
+  </message>
+
+<message id="2014" name="Allocation protocol" abbrev="alloc" source="vehicle"  category="Autonomy">
+   <description>
+    Information for allocation consensus problem
+   </description>
+   <field name="S vector list" abbrev="S_vec_list" type="message-list" message-type="Svec">
+   <description>
+    List of S vectors.
+   </description>
+   </field>
+   <field name="MMSI" abbrev="mmsi" type="int8_t"/>
+   <field name="Interation" abbrev="iter" type="int8_t"/>
+  </message>
+
+<message id="2015" name="S vector" abbrev="Svec" source="vehicle"  category="Autonomy">
+   <description>
+    S vector
+   </description>
+   <field name="value" abbrev="S_vecs" type="message-list" message-type="Svec_value">
+   <description>
+    S vector value list
+   </description>
+   </field>
+   <field name="Vector id" abbrev="id" type="int8_t"/>
+  </message>
+
+<message id="2016" name="Query Typed Entity Parameters" abbrev="QueryTypedEntityParameters" source="vehicle" category="CCU">
     <description>This message can be used to query/report the entities and respective parameters in the system</description>
     <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
       <description>
@@ -11790,7 +12170,73 @@
     </field>
   </message>
 
-  <message id="2021" name="Version Info" abbrev="VersionInfo" source="vehicle" category="Core">
+  <message id="2019" name="Otter Formation" abbrev="otterFormation" source="vehicle,ccu"  category="Autonomy">
+    <description>
+      Search formation for FishOtterProject (TODO: Also need a message to get progress? can IMC:: Plan Control State be used?)
+    </description>
+    <field name="Minimum Speed" abbrev="minSpeed" type="fp32_t">
+      <description>
+        The lowest speed to move without stopping during the search.
+      </description>
+    </field>
+    <field name="Maximum Speed" abbrev="maxSpeed" type="fp32_t">
+      <description>
+        The highest speed to move during the search.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units for the maximum and minimum speeds.
+      </description>
+    </field>
+    <field name="Minimum Radius" abbrev="minRadius" type="fp32_t">
+      <description>
+        The lowest distance to target when not constricted by obstacles.
+      </description>
+    </field>
+    <field name="Maximum Radius" abbrev="maxRadius" type="fp32_t">
+      <description>
+        The highest distance to target when not constricted by obstacles.
+      </description>
+    </field>
+
+    <field name="Source To Follow" abbrev="target" type="plaintext">
+      <description>
+        The identifier of the point source to follow (via RemoteSensorInfo).
+      </description>
+    </field>
+    <field name="Formation Participants" abbrev="participants" unit="List" type="plaintext">
+      <description>
+        List of formation participants.
+      </description>
+    </field>
+    <field name="Custom settings for formation" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for formation.
+      </description>
+    </field>
+
+    <field name="Message Type" abbrev="msg_type" type="uint8_t" unit="Enumerated" prefix="T">
+      <description>
+        Message Type
+      </description>
+      <value id="1" name="Start" abbrev="start">
+        <description>Command to initialize and start a formation controller.</description>
+      </value>
+      <value id="2" name="Stop" abbrev="stop">
+        <description>Command to stop a formation controller.</description>
+      </value>
+      <value id="3" name="Parameter Change" abbrev="param_change">
+        <description>Message contains changed parameters for an already running formation controller.</description>
+      </value>
+    </field>
+   </message>
+
+<message id="2020" abbrev="Svec_value" name="Value of an element of S vector" source="vehicle"  category="Autonomy">
+  	<field name="value" abbrev="value" type="fp64_t"/>
+  </message>
+
+<message id="2021" name="Version Info" abbrev="VersionInfo" source="vehicle" category="Core">
     <description>
       This message is used to query / report version information related to an entity.
     </description>
